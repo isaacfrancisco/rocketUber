@@ -1,8 +1,8 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import { Text, View } from "react-native";
 import { css } from "./assets/Css/Css";
-import MapView from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import { LOCATION_BACKGROUND } from "expo-permissions";
@@ -10,6 +10,7 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import config from "./config";
 import MapViewDirections from "react-native-maps-directions";
 import { getPixelSize } from "./utils";
+import markerImage from "./assets/marker.png";
 
 export default function App() {
   const mapEl = useRef(null);
@@ -46,22 +47,29 @@ export default function App() {
         ref={mapEl}
       >
         {destination && (
-          <MapViewDirections
-            origin={origin}
-            destination={destination}
-            apikey={config.googleApi}
-            strokeWidth={3}
-            onReady={(result) => {
-              mapEl.current.fitToCoordinates(result.coordinates, {
-                edgePadding: {
-                  top: getPixelSize(120),
-                  bottom: getPixelSize(120),
-                  left: getPixelSize(120),
-                  right: getPixelSize(120),
-                },
-              });
-            }}
-          />
+          <Fragment>
+            <MapViewDirections
+              origin={origin}
+              destination={destination}
+              apikey={config.googleApi}
+              strokeWidth={3}
+              onReady={(result) => {
+                mapEl.current.fitToCoordinates(result.coordinates, {
+                  edgePadding: {
+                    top: getPixelSize(120),
+                    bottom: getPixelSize(120),
+                    left: getPixelSize(120),
+                    right: getPixelSize(120),
+                  },
+                });
+              }}
+            />
+            <Marker
+              coordinate={destination}
+              anchor={{ x: 0, y: 0 }}
+              image={markerImage}
+            />
+          </Fragment>
         )}
       </MapView>
 
