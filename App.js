@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect, useRef, Fragment } from "react";
-import { Text, View } from "react-native";
+import { Text, View, Image } from "react-native";
 import { css } from "./assets/Css/Css";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
@@ -11,7 +11,9 @@ import config from "./config";
 import MapViewDirections from "react-native-maps-directions";
 import { getPixelSize } from "./utils";
 import markerImage from "./assets/marker.png";
+import backImage from "./assets/back.png";
 import {
+  Back,
   LocationBox,
   LocationText,
   LocationTimeBox,
@@ -57,6 +59,10 @@ export default function App() {
       }
     })();
   }, []);
+
+  handleBack = () => {
+    setDestination(null);
+  };
 
   return (
     <View style={css.container}>
@@ -108,7 +114,12 @@ export default function App() {
       </MapView>
 
       {destination ? (
-        <Details />
+        <Fragment>
+          <Back onPress={this.handleBack}>
+            <Image source={backImage} />
+          </Back>
+          <Details />
+        </Fragment>
       ) : (
         <GooglePlacesAutocomplete
           placeholder="Para Onde?"
