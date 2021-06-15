@@ -18,12 +18,16 @@ import {
   LocationTimeText,
   LocationTimeTextSmall,
 } from "./assets/Css/styles";
+import Geocoder from "react-native-geocoding";
+
+Geocoder.init(config.googleApi);
 
 export default function App() {
   const mapEl = useRef(null);
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
   const [duration, setDuration] = useState(null);
+  const [location, setLocation] = useState(null);
 
   useEffect(() => {
     (async function () {
@@ -31,9 +35,16 @@ export default function App() {
         Permissions.LOCATION_BACKGROUND
       );
       if (status === "granted") {
-        let location = await Location.getCurrentPositionAsync({
+        const location = await Location.getCurrentPositionAsync({
           enableHighAccuracy: true,
         });
+        const locationMoreDetails = await Geocoder.from({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        });
+        const address = locationMoreDetails.results[0].formatted_address;
+        const locationText = address.substring(0, address.indexOf(","));
+        setLocation(locationText);
         setOrigin({
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,
@@ -88,7 +99,7 @@ export default function App() {
                   <LocationTimeText>{duration}</LocationTimeText>
                   <LocationTimeTextSmall>MIN</LocationTimeTextSmall>
                 </LocationTimeBox>
-                <LocationText>Rua Dona Ambrosina Nunes</LocationText>
+                <LocationText>{location}</LocationText>
               </LocationBox>
             </Marker>
           </Fragment>
