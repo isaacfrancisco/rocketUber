@@ -7,12 +7,8 @@ const css = StyleSheet.create({
     justifyContent: "center",
   },
   map: {
-    height: "60%",
+    height: "100%",
     backgroundColor: "black",
-  },
-  search: {
-    height: "40%",
-    backgroundColor: "#fff",
   },
 });
 
