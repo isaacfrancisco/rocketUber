@@ -19,6 +19,7 @@ import {
   LocationTimeTextSmall,
 } from "./assets/Css/styles";
 import Geocoder from "react-native-geocoding";
+import Details from "./components/Details";
 
 Geocoder.init(config.googleApi);
 
@@ -77,7 +78,7 @@ export default function App() {
                 mapEl.current.fitToCoordinates(result.coordinates, {
                   edgePadding: {
                     top: getPixelSize(120),
-                    bottom: getPixelSize(120),
+                    bottom: getPixelSize(350),
                     left: getPixelSize(120),
                     right: getPixelSize(120),
                   },
@@ -106,77 +107,81 @@ export default function App() {
         )}
       </MapView>
 
-      <GooglePlacesAutocomplete
-        placeholder="Para Onde?"
-        onPress={(data, details) => {
-          setDestination({
-            latitude: details.geometry.location.lat,
-            longitude: details.geometry.location.lng,
-            latitudeDelta: 0.00922,
-            longitudeDelta: 0.00421,
-            title: details.name,
-          });
-        }}
-        query={{
-          key: config.googleApi,
-          language: "pt-br",
-        }}
-        fetchDetails={true}
-        styles={{
-          container: {
-            position: "absolute",
-            top: 60,
-            width: "100%",
-          },
-          textInputContainer: {
-            flex: 1,
-            backgroundColor: "transparent",
-            height: 54,
-            marginHorizontal: 20,
-            borderTopWidth: 0,
-            borderBottomWidth: 0,
-          },
-          textInput: {
-            height: 54,
-            margin: 0,
-            borderRadius: 0,
-            paddingTop: 0,
-            paddingBottom: 0,
-            paddingLeft: 20,
-            paddingRight: 20,
-            marginTop: 0,
-            marginLeft: 0,
-            marginRight: 0,
-            elevation: 5,
-            shadowColor: "#000",
-            shadowOpacity: 0.1,
-            shadowOffset: { x: 0, y: 0 },
-            shadowRadius: 15,
-            borderWidth: 1,
-            borderColor: "#DDD",
-            fontSize: 18,
-          },
-          listView: {
-            borderWidth: 1,
-            borderColor: "#DDD",
-            backgroundColor: "#FFF",
-            marginHorizontal: 20,
-            elevation: 5,
-            shadowColor: "#000",
-            shadowOpacity: 0.1,
-            shadowOffset: { x: 0, y: 0 },
-            shadowRadius: 15,
-            marginTop: 10,
-          },
-          description: {
-            fontSize: 16,
-          },
-          row: {
-            padding: 20,
-            height: 58,
-          },
-        }}
-      />
+      {destination ? (
+        <Details />
+      ) : (
+        <GooglePlacesAutocomplete
+          placeholder="Para Onde?"
+          onPress={(data, details) => {
+            setDestination({
+              latitude: details.geometry.location.lat,
+              longitude: details.geometry.location.lng,
+              latitudeDelta: 0.00922,
+              longitudeDelta: 0.00421,
+              title: details.name,
+            });
+          }}
+          query={{
+            key: config.googleApi,
+            language: "pt-br",
+          }}
+          fetchDetails={true}
+          styles={{
+            container: {
+              position: "absolute",
+              top: 60,
+              width: "100%",
+            },
+            textInputContainer: {
+              flex: 1,
+              backgroundColor: "transparent",
+              height: 54,
+              marginHorizontal: 20,
+              borderTopWidth: 0,
+              borderBottomWidth: 0,
+            },
+            textInput: {
+              height: 54,
+              margin: 0,
+              borderRadius: 0,
+              paddingTop: 0,
+              paddingBottom: 0,
+              paddingLeft: 20,
+              paddingRight: 20,
+              marginTop: 0,
+              marginLeft: 0,
+              marginRight: 0,
+              elevation: 5,
+              shadowColor: "#000",
+              shadowOpacity: 0.1,
+              shadowOffset: { x: 0, y: 0 },
+              shadowRadius: 15,
+              borderWidth: 1,
+              borderColor: "#DDD",
+              fontSize: 18,
+            },
+            listView: {
+              borderWidth: 1,
+              borderColor: "#DDD",
+              backgroundColor: "#FFF",
+              marginHorizontal: 20,
+              elevation: 5,
+              shadowColor: "#000",
+              shadowOpacity: 0.1,
+              shadowOffset: { x: 0, y: 0 },
+              shadowRadius: 15,
+              marginTop: 10,
+            },
+            description: {
+              fontSize: 16,
+            },
+            row: {
+              padding: 20,
+              height: 58,
+            },
+          }}
+        />
+      )}
     </View>
   );
 }
