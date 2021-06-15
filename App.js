@@ -6,6 +6,8 @@ import MapView from "react-native-maps";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import { LOCATION_BACKGROUND } from "expo-permissions";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import config from "./config";
 
 export default function App() {
   const [origin, setOrigin] = useState(null);
@@ -39,7 +41,30 @@ export default function App() {
         initialRegion={origin}
         showsUserLocation={true}
       ></MapView>
-      <View style={css.search}></View>
+      <View style={css.search}>
+        <GooglePlacesAutocomplete
+          placeholder="Para Onde?"
+          onPress={(data, details) => {
+            setDestination({
+              latitude: details.geometry.location.lat,
+              longitude: details.geometry.location.lng,
+              latitudeDelta: 0.00922,
+              longitudeDelta: 0.00421,
+            });
+            console.log(destination);
+          }}
+          query={{
+            key: config.googleApi,
+            language: "pt-br",
+          }}
+          fetchDetails={true}
+          styles={{
+            listView: {
+              height: 100,
+            },
+          }}
+        />
+      </View>
     </View>
   );
 }

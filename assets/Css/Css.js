@@ -12,7 +12,7 @@ const css = StyleSheet.create({
   },
   search: {
     height: "40%",
-    backgroundColor: "gray",
+    backgroundColor: "#fff",
   },
 });
 
