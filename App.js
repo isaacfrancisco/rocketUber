@@ -11,11 +11,19 @@ import config from "./config";
 import MapViewDirections from "react-native-maps-directions";
 import { getPixelSize } from "./utils";
 import markerImage from "./assets/marker.png";
+import {
+  LocationBox,
+  LocationText,
+  LocationTimeBox,
+  LocationTimeText,
+  LocationTimeTextSmall,
+} from "./assets/Css/styles";
 
 export default function App() {
   const mapEl = useRef(null);
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
+  const [duration, setDuration] = useState(null);
 
   useEffect(() => {
     (async function () {
@@ -54,6 +62,7 @@ export default function App() {
               apikey={config.googleApi}
               strokeWidth={3}
               onReady={(result) => {
+                setDuration(Math.floor(result.duration));
                 mapEl.current.fitToCoordinates(result.coordinates, {
                   edgePadding: {
                     top: getPixelSize(120),
@@ -68,7 +77,20 @@ export default function App() {
               coordinate={destination}
               anchor={{ x: 0, y: 0 }}
               image={markerImage}
-            />
+            >
+              <LocationBox>
+                <LocationText>{destination.title}</LocationText>
+              </LocationBox>
+            </Marker>
+            <Marker coordinate={origin} anchor={{ x: 0, y: 0 }}>
+              <LocationBox>
+                <LocationTimeBox>
+                  <LocationTimeText>{duration}</LocationTimeText>
+                  <LocationTimeTextSmall>MIN</LocationTimeTextSmall>
+                </LocationTimeBox>
+                <LocationText>Rua Dona Ambrosina Nunes</LocationText>
+              </LocationBox>
+            </Marker>
           </Fragment>
         )}
       </MapView>
@@ -81,6 +103,7 @@ export default function App() {
             longitude: details.geometry.location.lng,
             latitudeDelta: 0.00922,
             longitudeDelta: 0.00421,
+            title: details.name,
           });
         }}
         query={{
